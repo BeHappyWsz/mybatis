@@ -25,7 +25,11 @@ public class Book implements Serializable{
 	@Setter
 	@Getter
 	private String author;
-	
+
+	@Setter
+	@Getter
+	private String realName;
+
 	@Setter
 	@Getter
 	private float price;
@@ -40,8 +44,14 @@ public class Book implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Book [id=" + id + ", name=" + name + ", author=" + author
-				+ ", price=" + price + ", des=" + des + ", date=" + date + "]";
+		return "Book{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", author='" + author + '\'' +
+				", realName='" + realName + '\'' +
+				", price=" + price +
+				", des='" + des + '\'' +
+				", date=" + date +
+				'}';
 	}
-	
 }

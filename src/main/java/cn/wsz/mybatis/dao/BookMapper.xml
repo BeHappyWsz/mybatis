@@ -4,31 +4,62 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.wsz.mybatis.dao.BookMapper">
 	<resultMap type="cn.wsz.mybatis.domain.Book" id="BaseResultMap">
-		<id     property ="id"      column="id"/>
-		<result property="name"     column="name"/>
-		<result property="author"     column="author"/>
+		<id     property ="id"       column="id"/>
+		<result property="name"      column="name"/>
+		<result property="author"    column="author"/>
+		<result property="realName"  column="real_name"/>
 		<result property="price"     column="price"/>
-		<result property="des"      column="des"/>
+		<result property="des"       column="des"/>
 		<result property="date"      column="date"/>
 	</resultMap>
 	
 	<parameterMap id="book" type="cn.wsz.mybatis.domain.Book"/>
 	
 	<sql id="Base_Column">
-		id,name,author,price,des,date
+		id,name,author,real_name,price,des,date
 	</sql>
  	 
  	<select id="findAll" resultMap="BaseResultMap">
  		select	<include refid="Base_Column"/>
  		from book
  	</select>
- 	 
+
+	<select id="getById" resultType="cn.wsz.mybatis.domain.Book" parameterType="Long">
+		select id, name, author, price, des, date
+		from book
+		where id = #{id}
+	</select>
+
+	<select id="findOne" resultType="cn.wsz.mybatis.domain.Book" parameterType="Long">
+		select <include refid="Base_Column"/>
+		from book
+		where id = #{id}
+	</select>
+
  	 <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long">
  	 	select	<include refid="Base_Column"/>
  		from book
  		where id = #{id}
  	 </select>
- 	 
+
+	<select id="findByMap" parameterType="map" resultMap="BaseResultMap">
+		select <include refid="Base_Column"/>
+		from book
+		where author like concat('%',#{author},'%') or name like concat('%',#{name},'%')
+	</select>
+
+	<select id="findByAno" resultMap="BaseResultMap">
+		select <include refid="Base_Column"/>
+		from book
+		where author like concat('%',#{author},'%') or name like concat('%',#{name},'%')
+	</select>
+
+	<select id="findByJavaBean" resultMap="BaseResultMap" parameterType="cn.wsz.mybatis.domain.Book">
+		select <include refid="Base_Column"/>
+		from book
+		where author like concat('%',#{author},'%') or name like concat('%',#{name},'%')
+	</select>
+
  	 <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
  	 	select	<include refid="Base_Column"/>
  		from book
@@ -40,7 +71,13 @@
  		from book
  		where author like #{author}
  	 </select>	
- 	 
+
+	<select id="countAllByAuthor" resultType="int" parameterType="String">
+		select COUNT(*) as total
+		from book
+		where author like concat('%',#{author},'%')
+	</select>
+
  	 <insert id="insertBook" useGeneratedKeys="true" keyProperty="id" parameterType="cn.wsz.mybatis.domain.Book"> 
  	  	 insert into book(id,name,author,price,des,date)
  	  	 values(#{id},#{name},#{author},#{price},#{des},#{date})
